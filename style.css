@@ -32,14 +32,22 @@ button, select {
   min-height: 44px;
   padding: 5px 12px;
 }
-button { cursor: pointer; font-weight: 650; touch-action: manipulation; }
-button:hover { background: #2b4653; }
-button:active { background: #36596a; }
+button {
+  cursor: pointer; font-weight: 650; touch-action: manipulation;
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+}
+@media (hover: hover) and (pointer: fine) {
+  button:hover { background: #2b4653; }
+  button:active { background: #36596a; }
+}
 button:focus-visible, select:focus-visible { outline: 2px solid white; outline-offset: 2px; }
 button:disabled { opacity: .46; cursor: default; }
 button[aria-pressed="true"] { color: #061d22; background: var(--cyan); border-color: var(--cyan); }
 button.primary, button.accent { background: #14616a; border-color: #5ec9cc; color: #fafefe; }
-button.primary:hover, button.accent:hover { background: #197783; }
+@media (hover: hover) and (pointer: fine) {
+  button.primary:hover, button.accent:hover { background: #197783; }
+}
 button small { display: block; margin-top: 3px; color: #c0d8df; font-size: .69rem; font-weight: 500; white-space: nowrap; }
 
 .top {

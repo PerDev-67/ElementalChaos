@@ -14,6 +14,14 @@ export function bindInput(root, active, onAction) {
   const pointers = new Map();
   const pad = [...root.querySelectorAll('[data-direction]')];
 
+  // iPad Safari can start a callout even when a pointer is captured.
+  root.addEventListener('contextmenu', event => {
+    if (event.target.closest('button')) event.preventDefault();
+  });
+  root.addEventListener('selectstart', event => {
+    if (event.target.closest('button')) event.preventDefault();
+  });
+
   function showDirections() {
     for (const button of pad) {
       const direction = button.dataset.direction;
@@ -55,6 +63,15 @@ export function bindInput(root, active, onAction) {
   });
   window.addEventListener('keyup', event => keys.delete(event.code));
   window.addEventListener('blur', clear);
+  for (const name of ['pointerup', 'pointercancel']) {
+    window.addEventListener(name, event => {
+      if (pointers.delete(event.pointerId)) showDirections();
+    }, true);
+  }
+  window.addEventListener('pagehide', clear);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) clear();
+  });
 
   const axis = { x: 0, z: 0 };
   function read() {
