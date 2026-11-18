@@ -2,19 +2,26 @@
 
 ## Implemented
 
-- Chapter 1, Level 1 with a complete 100-second core-defense mission and a local Hydrogen unlock.
-- 3D arena, elevated terrain, follow camera with zoom, and raycast squad positioning.
-- Three enemy types and three waves, autonomous allies, four squad orders, pulse, energy, and ranks.
-- Guided or skippable training, pause and restart, checkpoint recovery, touch controls, responsive HUD, and two graphics settings.
-- Modular game source, static hosting support, and automated simulation and save tests.
-- The original prototype and its byte-identical backup are available in Git history at commit `cecabca`.
-
-## Outstanding
-
-- Physical iPad Safari playtest, device-specific frame-rate measurements, and owner review before hosting.
-- English is the only shipped locale. Traditional Chinese and Japanese translations remain planned.
-- Levels 2–118, seven selectable difficulty settings, additional elements, reactions, temperature, destructible structures, longer-term progression trees, and cloud saves are future work.
+- [x] Four sequential, replayable missions in two chapters and four elemental unlocks.
+- [x] Iris Station hub, four themed battlefields, map and unlocked-destination travel.
+- [x] Ren, original anime portraits, dialogue, female-majority supporting cast and stylized 3D figures.
+- [x] Keyboard movement, running, touch joystick or pad, camera zoom, interaction and selection.
+- [x] Long-press text and callout suppression, pointer release and cancellation cleanup.
+- [x] Four element roles, duplicates, four squad orders, energy pickup, rank upgrades, capture and final guardian.
+- [x] Eight-step replayable tutorial, one field recovery, defeat, victory and end-of-prototype screens.
+- [x] Four permanent traits, element collection, versioned saves and Level 1 migration.
+- [x] Original synthesized music and sound cues, individual volume settings, graphics presets and optional 30 FPS.
+- [x] Complete English interface and partial Traditional Chinese and Japanese menus and controls.
+- [x] Hydrogen cooling demonstration, state and temperature display.
 
 ## Known limitations
 
-Terrain height changes presentation and entity placement. It has no gameplay effect on movement speed or attack range. Units can overlap in crowds and do not pathfind around the portal or platform props. Settings, checkpoints, and Hydrogen unlock belong to the current browser and site. The graphics setting keeps CPU simulation at the same rate in both modes. Gameplay and performance for hundreds of actors have yet to be measured.
+- The 3D characters use stylized placeholder meshes. Full custom animated anime models remain future work.
+- Traditional Chinese and Japanese cover the common navigation, controls, settings and some battle terms. Story and several gameplay descriptions fall back to English.
+- Units steer around placed obstacles. They can bunch in crowds, and decorative scenery can be crossed.
+- Phase calculations cover the prototype demonstration, with temperature effects confined to the beacon region.
+- Physical iPad Safari playtesting, audio listening on hardware and device performance measurements remain pending.
+
+## Future expansion
+
+Measure iPad draw time and control behavior before raising battle caps. Add a navigation graph and spatial lookup when introducing larger or more crowded battlefields. Improve custom character animation and finish the two translation catalogs before expanding the campaign.

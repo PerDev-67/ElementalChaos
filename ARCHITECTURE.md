@@ -1,30 +1,26 @@
 # Architecture
 
-The browser loads `index.html`, `style.css`, and native ES modules. The same files can be served at a static host's root or inside a project subdirectory. Three.js r180 is vendored under `vendor/` with its MIT license. There is no runtime network dependency.
+The browser loads the static entry point, stylesheet, and native ES modules. Production has no external runtime requests. All rendering uses the vendored Three.js r180 modules.
 
 | Module | Responsibility |
 | --- | --- |
-| `src/main.js` | Game loop, training and mission lifecycle, input and save coordination |
-| `src/config.js` | Level, enemy, element, upgrade, and terrain tuning |
-| `src/mission.js` | Battle state, player actions, spawn schedule, energy and outcomes |
-| `src/player.js` | Ground-plane movement, math, and arena bounds |
-| `src/units.js` | Unit creation, formations, targeting, AI, and attacks |
-| `src/combat.js` | Damage, cooldowns, and combat events |
-| `src/render.js` | 3D meshes, health bars, combat effects, and tap-to-world picking |
-| `src/camera.js` | Orthographic follow camera and zoom |
-| `src/terrain.js` | Elevation mesh, reactor platform, markings, and portals |
-| `src/input.js` | Keyboard state, independent active touch pointers, and cancellation |
-| `src/ui.js`, `src/locale.js` | HUD, menus, tutorial, and English copy with interpolation |
-| `src/save.js` | Local checkpoint, graphics setting, and unlock validation |
+| `src/main.js` | Scene and screen transitions, tutorial coordination, fixed-step scheduling |
+| `src/config.js` | Four mission records, wave patterns, enemy specs, world themes and obstacles |
+| `src/player.js` | Ground-plane controls, field bounds, and local obstacle steering |
+| `src/mission.js` | Spawn schedules, resources, unit selection, orders, combat outcomes and temporary ranks |
+| `src/units.js`, `src/combat.js` | Targeting, autonomous movement, attacks, elemental abilities, damage |
+| `src/elements.js` | Element identities, stats and phase thresholds |
+| `src/campaign.js` | Station characters, story, destination locks, rewards and permanent traits |
+| `src/profile.js`, `src/save.js` | Versioned local campaign checkpoint and legacy Level 1 migration |
+| `src/input.js` | Keyboard, touch pad, joystick, pointer capture and cancellation |
+| `src/camera.js`, `src/render.js`, `src/terrain.js` | Camera, meshes, world picking, terrain and effects |
+| `src/ui.js`, `src/locale.js` | HUD, tutorial, settings, menus, translations and dialogue presentation |
+| `src/audio.js` | Original Web Audio music loops and effect cues |
 
-## Simulation and rendering
+## Runtime
 
-The simulation advances in fixed 1/30-second steps driven by browser animation frames. A frame accounts for up to 250 ms of elapsed time, which limits catch-up after extreme stalls. Pausing or hiding the tab stops battle time. Entities use X/Z gameplay coordinates. The renderer uses the shared terrain height to position entities in 3D. Move orders raycast against the terrain first and clamp the resulting destination to the arena.
+Simulation advances at 30 fixed steps per second. The frame loop caps catch-up after a long stall. Menus and hidden tabs pause an active battle. Graphics quality changes render pixel ratio. The frame cap is independent of the simulation rate. Static environments and actor geometry are reused. Combat trails and the pickup meshes use bounded buffers.
 
-The scene reuses geometry and materials, and meshes survive across frames until an entity is removed. Attack lines use preallocated buffers. HUD updates are throttled. Pixel ratio is capped at 1.5 in Standard and 1 in Battery saver. Simulation accuracy remains unchanged when graphics quality changes.
+The battlefield caps active allies and enemies for this prototype. Target scans are bounded, local obstacle steering handles placed boulders and barricades, and nearby camera obstructions fade. Later larger maps will require measured navigation and rendering improvements.
 
-Level 1 has at most 16 allied and 58 enemy units. Targeting uses bounded linear scans directly over live entities. A larger battle warrants profiling first, with spatial indexing and instanced actor meshes as likely follow-on work.
-
-## Saves
-
-The versioned local-storage record stores the last active mission checkpoint, graphics quality, and whether Level 1 has been won. It validates ranges, known unit types, and unique actor IDs on reload. Active runs checkpoint approximately every five seconds, on pause, and on page exit when permitted. Saves exclude short-lived visual effects. Older unversioned prototype sessions had no save format. Future format changes should add an explicit migration when shipping a new version.
+Campaign version 2 stores a contiguous completion sequence, first-clear currency, traits, tutorial status, settings, and one active battle checkpoint. Loading validates ranges and actor IDs. Version 1 is migrated on the first new save, including the Hydrogen unlock and a compatible active Level 1 checkpoint.
