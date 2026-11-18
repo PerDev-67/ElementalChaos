@@ -27,9 +27,9 @@ export class FollowCamera {
 
   follow(player, dt, snap = false) {
     const smoothing = snap ? 1 : 1 - Math.exp(-dt * 5.5);
-    this.focus.x += (player.x * 0.82 - this.focus.x) * smoothing;
-    this.focus.z += (player.z * 0.82 - 3 - this.focus.z) * smoothing;
-    this.camera.position.set(this.focus.x, 36, this.focus.z + 33);
+    this.focus.x += (player.x * 0.78 - this.focus.x) * smoothing;
+    this.focus.z += (player.z * 0.78 - 2.4 - this.focus.z) * smoothing;
+    this.camera.position.set(this.focus.x, 36, this.focus.z + 35);
     this.camera.lookAt(this.focus);
     this.camera.updateMatrixWorld();
   }

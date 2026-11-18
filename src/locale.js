@@ -81,7 +81,94 @@ const en = {
   webglError: 'This browser could not start WebGL 2. Try opening this page in an up-to-date Safari or Chrome with graphics acceleration enabled.'
 };
 
+let language = 'en';
+export function setLocale(locale) {
+  language = locale;
+}
 export function t(key, values = {}) {
-  const message = en[key] ?? key;
+  const message = shell[language]?.[key] ?? en[key] ?? key;
   return typeof message === 'string' ? message.replace(/\{(\w+)\}/g, (_, token) => values[token] ?? '') : message;
 }
+
+export const shell = {
+  'zh-Hant': {
+    newGame: '新遊戲', continueGame: '繼續遊戲', settings: '設定', tutorial: '教學', skipTutorial: '跳過教學',
+    map: '地圖', hub: '返回基地', shop: '強化商店', collection: '元素圖鑑', pause: '暫停',
+    follow: '跟隨', defend: '防守', attack: '進攻', move: '移動', all: '全隊', resume: '繼續',
+    strike: '攻擊', interact: '互動', run: '奔跑', summon: '召喚', upgrade: '升級', pulse: '脈衝',
+    locked: '尚未解鎖', travel: '前往', startMission: '開始任務', back: '返回'
+  },
+  ja: {
+    newGame: 'ニューゲーム', continueGame: 'つづきから', settings: '設定', tutorial: 'チュートリアル',
+    skipTutorial: 'スキップ', map: '地図', hub: '拠点へ戻る', shop: '強化ショップ', collection: '元素図鑑',
+    pause: '一時停止', follow: '追従', defend: '防衛', attack: '攻撃指令', move: '移動', all: '全員',
+    resume: '再開', strike: '攻撃', interact: '調べる', run: '走る', summon: '召喚', upgrade: '強化',
+    pulse: 'パルス', locked: '未解放', travel: '移動する', startMission: '任務開始', back: '戻る'
+  }
+};
+
+Object.assign(en, {
+  pageTitle: 'Elemental Chaos',
+  rpgTitle: '𝙀𝙡𝙚𝙢𝙚𝙣𝙩𝙖𝙡 𝘾𝙝𝙖𝙤𝙨',
+  rpgIntro: 'Explore Iris Station, rally elemental allies, and trace the fractures threatening the four regions.',
+  newGame: 'New Game', continueGame: 'Continue', settings: 'Settings', tutorial: 'Start Tutorial',
+  skipTutorial: 'Skip Tutorial', map: 'Map', hub: 'Return to station', shop: 'Upgrade shop', collection: 'Element collection',
+  travel: 'Travel', back: 'Back', startMission: 'Begin mission', interact: 'Interact', run: 'Run',
+  all: 'All', strike: 'Strike', summon: 'Summon', locked: 'Locked',
+  opening: 'IRIS STATION / CAMPAIGN', currencies: '{coins} shards · {clears} / 4 missions cleared',
+  levelCallout: 'CHAPTER {chapter} / LEVEL {level}', mapIntro: 'Travel freely to the station or any unlocked destination.',
+  shopIntro: 'Spend shards on permanent upgrades. Battle ranks reset after each mission.',
+  collectionIntro: 'Complete missions to unlock elements in atomic-number order.',
+  unknownElement: 'Clear Level {id} to unlock.', clear: 'Cleared', available: 'Available', owned: 'Purchased',
+  price: '{cost} shards', talkMira: 'Check the map when you are ready. The vale relay is still in range.',
+  talkTess: 'Bring me the shards you collect after a mission. I can turn them into something useful.',
+  talkLumi: 'The station sounds different when the fractures quiet down. I hope the upper platforms sound that way soon.',
+  talkOrin: 'The station was built to hold a line. Look after people first, and the walls will follow.',
+  noInteraction: 'Move closer to a station character or the chill beacon.',
+  noTarget: 'Move closer to an enemy to strike.',
+  message_strike: 'Ren struck the nearest hostile.',
+  message_chill: 'Cooling field active for 18 seconds.',
+  field: '{state} · {temp} K', gas: 'Gas', liquid: 'Liquid', solid: 'Solid',
+  respawn: 'Ren used his one field recovery.',
+  capture: 'Hold the survey ring', captureProgress: '{percent}% secured',
+  finalBoss: 'Defeat the Citadel guardian', bossHp: 'Guardian: {hp} HP',
+  cleanUp: 'Eliminate remaining hostiles', leftEnemies: '{count} hostiles remaining',
+  explore: 'Explore Iris Station', interactNearby: 'Interact with {name}', selected: '{selected} selected · {count} / {cap}',
+  earned: 'First clear · +{coins} shards', replayClear: 'Mission replay cleared', complete: 'The Fractures Fall Silent',
+  finalClear: 'Prototype complete · 4 / 4 elements discovered',
+  resetTitle: 'Start a new campaign?', resetHelp: 'This replaces the local campaign and its checkpoint. Settings will be kept.',
+  resetConfirm: 'Start new campaign', quality: 'Graphics quality',
+  low: 'Low', medium: 'Medium', high: 'High', ultra: 'Ultra', limit: '30 FPS cap',
+  music: 'Music volume', effects: 'Sound effects volume', movement: 'Touch movement',
+  stick: 'Joystick', pad: 'Directional pad', display: 'Elemental appearance',
+  simple: 'Simple spheres', adventurers: 'Stylized adventurers', locale: 'Language',
+  keyboard: 'WASD or arrows · Shift run · E interact · F strike · Space pulse · 1 summon · 2–5 orders · U rank · M map',
+  lessonCamera: 'Look around the vale', lessonCameraHelp: 'Tap + or − to change the camera zoom.',
+  lessonTalk: 'Talk to Dr. Mira', lessonTalkHelp: 'Tap Interact or press E to speak with the scientist beside you.',
+  lessonAuto: 'Watch your ally fight', lessonAutoHelp: 'A small hostile appears. Your Hydrogen ally attacks automatically when it gets close.',
+  lessonCore: 'Guard the relay', lessonCoreHelp: 'The cyan crystal is your objective. Choose Defend to set a guard around it.',
+  lessonFinish: 'Complete the mission', lessonFinishHelp: 'Keep the relay alive until the waves stop. Defeat any hostiles left on the field.',
+  lessonDefendHelp: 'Choose Follow, Attack, or Move. For Move, then tap an open spot in the arena.',
+  lessonSummonHelp: 'Tap Summon or press 1. Your first Hydrogen unit costs 16 energy.',
+  lessonMoveHelp: 'Drag the joystick or hold a direction on the pad. On a keyboard, use WASD or the arrow keys.',
+  tutorialLabel: 'FIELD TRAINING / {step} OF 8',
+  campaignCheckpoint: 'You can resume the latest mission checkpoint.'
+});
+en.lessonOrders = 'Command your allies';
+en.lessonOrdersHelp = en.lessonDefendHelp;
+
+Object.assign(en, { titleScreen: 'Title screen', skipBriefing: 'Skip briefing', plasma: 'Plasma' });
+Object.assign(shell['zh-Hant'], {
+  titleScreen: '返回標題', skipBriefing: '跳過簡報', quality: '畫面品質', low: '低', medium: '中', high: '高', ultra: '極高',
+  limit: '限制為 30 FPS', music: '音樂音量', effects: '音效音量', movement: '觸控移動', stick: '虛擬搖桿',
+  pad: '方向鍵', display: '元素外觀', simple: '簡易球體', adventurers: '冒險者', locale: '語言',
+  field: '{state} · {temp} K', gas: '氣態', liquid: '液態', solid: '固態', plasma: '電漿',
+  earned: '首次通關 · +{coins} 碎片', owned: '已購買', clear: '已通關', available: '可前往'
+});
+Object.assign(shell.ja, {
+  titleScreen: 'タイトルに戻る', skipBriefing: '会話をスキップ', quality: '画質', low: '低', medium: '中', high: '高', ultra: '最高',
+  limit: '30 FPS に制限', music: '音楽の音量', effects: '効果音の音量', movement: 'タッチ移動', stick: 'スティック',
+  pad: '方向パッド', display: '元素の外見', simple: '球体', adventurers: '冒険者', locale: '言語',
+  field: '{state} · {temp} K', gas: '気体', liquid: '液体', solid: '固体', plasma: 'プラズマ',
+  earned: '初回クリア · +{coins} シャード', owned: '購入済み', clear: 'クリア済み', available: '解放済み'
+});
