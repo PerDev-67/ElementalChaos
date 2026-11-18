@@ -28,4 +28,4 @@ The game is a static site with local ES modules and vendored Three.js r180 (MIT)
 
 Run `npm run check` and `npm test` with Node.js 22 or newer. See [testing](TESTING.md), [game design](GAME_DESIGN.md), [architecture](ARCHITECTURE.md), and [development status](DEVELOPMENT_STATUS.md).
 
-The original prototype remains at [EC1.html](EC1.html), with an exact copy at [prototype/EC1.html](prototype/EC1.html).
+The original prototype is available in Git history at commit `cecabca`.

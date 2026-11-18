@@ -7,7 +7,7 @@
 - Three enemy types and three waves, autonomous allies, four squad orders, pulse, energy, and ranks.
 - Guided or skippable training, pause and restart, checkpoint recovery, touch controls, responsive HUD, and two graphics settings.
 - Modular game source, static hosting support, and automated simulation and save tests.
-- Original `EC1.html` preserved, including a byte-identical archival copy.
+- The original prototype and its byte-identical backup are available in Git history at commit `cecabca`.
 
 ## Outstanding
 
