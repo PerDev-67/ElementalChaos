@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#11181e">
+  <title>Elemental Chaos | Hydrogen Awakening</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./src/main.js"></script>
+</head>
+<body>
+  <main id="game">
+    <canvas id="arena" aria-label="3D battlefield"></canvas>
+    <header class="top">
+      <div class="identity">
+        <div class="atom" aria-hidden="true">H</div>
+        <div>
+          <div class="brand" data-text="brand"></div>
+          <div class="level" data-text="levelLabel"></div>
+        </div>
+      </div>
+      <div class="tools">
+        <button data-action="zoomOut" aria-label="Zoom out" title="Zoom out">−</button>
+        <button data-action="zoomIn" aria-label="Zoom in" title="Zoom in">+</button>
+        <button data-action="pause" data-text="pause"></button>
+      </div>
+    </header>
+
+    <div class="hud">
+      <section class="status panel" aria-label="Battle status">
+        <div class="meter core">
+          <div><span data-text="core"></span><output id="core-value"></output></div>
+          <progress id="core" max="340" value="340" aria-label="Core integrity"></progress>
+        </div>
+        <div class="meter health">
+          <div><span data-text="health"></span><output id="health-value"></output></div>
+          <progress id="health" max="100" value="100" aria-label="Commander health"></progress>
+        </div>
+        <div class="meter energy">
+          <div><span data-text="energy"></span><output id="energy-value"></output></div>
+          <progress id="energy" max="100" value="64" aria-label="Energy"></progress>
+        </div>
+      </section>
+      <section class="objective panel" aria-label="Objective">
+        <div class="phase" id="phase"></div>
+        <h1 data-text="objective"></h1>
+        <div class="timer" id="timer" aria-label="Time remaining">1:40</div>
+        <progress id="clock" max="100" value="100" aria-label="Time remaining"></progress>
+        <div id="wave-name"></div>
+      </section>
+    </div>
+
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+
+    <section id="tutorial" class="panel" aria-labelledby="lesson" hidden>
+      <div id="lesson-count" class="eyebrow"></div>
+      <h2 id="lesson"></h2>
+      <p id="lesson-help"></p>
+      <div class="lesson-actions">
+        <button data-action="skip" data-text="skipTutorial"></button>
+        <button id="lesson-next" class="accent" data-action="next" disabled></button>
+      </div>
+    </section>
+
+    <div class="controls">
+      <div class="movement">
+        <div id="pad" aria-label="Movement pad">
+          <button data-direction="up" aria-label="Move north">↑</button>
+          <button data-direction="left" aria-label="Move west">←</button>
+          <button data-direction="down" aria-label="Move south">↓</button>
+          <button data-direction="right" aria-label="Move east">→</button>
+        </div>
+      </div>
+      <section class="orders panel" aria-label="Squad orders">
+        <div class="section-label">
+          <span data-text="commandLabel"></span><span id="squad"></span>
+        </div>
+        <div class="button-row">
+          <button data-action="attack" data-text="attack" aria-pressed="false"></button>
+          <button data-action="defend" data-text="defend" aria-pressed="true"></button>
+          <button data-action="follow" data-text="follow" aria-pressed="false"></button>
+          <button data-action="move" data-text="move" aria-pressed="false"></button>
+        </div>
+      </section>
+      <section class="abilities panel" aria-label="Abilities">
+        <div class="section-label">
+          <span data-text="abilityLabel"></span><span id="rank"></span>
+        </div>
+        <div class="button-row">
+          <button data-action="summon" class="primary"><span data-text="summon"></span><small id="summon-cost"></small></button>
+          <button data-action="pulse"><span data-text="pulse"></span><small id="pulse-cost"></small></button>
+          <button data-action="upgrade"><span data-text="upgrade"></span><small id="upgrade-cost"></small></button>
+        </div>
+      </section>
+    </div>
+
+    <dialog id="menu" class="panel" aria-labelledby="menu-title">
+      <div class="dialog-content">
+        <div class="eyebrow" id="menu-label"></div>
+        <h2 id="menu-title"></h2>
+        <p id="menu-description"></p>
+        <p id="menu-detail"></p>
+        <div id="menu-actions"></div>
+        <label class="quality" for="quality"><span data-text="quality"></span>
+          <select id="quality">
+            <option value="standard" data-text="standard"></option>
+            <option value="battery" data-text="battery"></option>
+          </select>
+        </label>
+        <p class="keyboard" data-text="keyboard"></p>
+      </div>
+    </dialog>
+    <noscript>This game requires JavaScript.</noscript>
+  </main>
+</body>
+</html>
