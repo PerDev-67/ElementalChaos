@@ -16,10 +16,11 @@
         <div class="atom" aria-hidden="true">H</div>
         <div>
           <div class="brand" data-text="brand"></div>
-          <div class="level" data-text="levelLabel"></div>
+          <div class="level" id="location"></div>
         </div>
       </div>
       <div class="tools">
+        <button data-action="map" data-text="map"></button>
         <button data-action="zoomOut" aria-label="Zoom out" title="Zoom out">−</button>
         <button data-action="zoomIn" aria-label="Zoom in" title="Zoom in">+</button>
         <button data-action="pause" data-text="pause"></button>
@@ -43,10 +44,10 @@
       </section>
       <section class="objective panel" aria-label="Objective">
         <div class="phase" id="phase"></div>
-        <h1 data-text="objective"></h1>
+        <h1 id="objective" data-text="objective"></h1>
         <div class="timer" id="timer" aria-label="Time remaining">1:40</div>
         <progress id="clock" max="100" value="100" aria-label="Time remaining"></progress>
-        <div id="wave-name"></div>
+        <div id="wave-name"></div><div id="field-status"></div>
       </section>
     </div>
 
@@ -64,6 +65,7 @@
 
     <div class="controls">
       <div class="movement">
+        <div id="stick" aria-label="Movement joystick"><span></span></div>
         <div id="pad" aria-label="Movement pad">
           <button data-direction="up" aria-label="Move north">↑</button>
           <button data-direction="left" aria-label="Move west">←</button>
@@ -71,11 +73,16 @@
           <button data-direction="right" aria-label="Move east">→</button>
         </div>
       </div>
+      <div class="field-actions">
+        <button data-action="run" data-text="run" aria-pressed="false"></button>
+        <button data-action="interact" data-text="interact"></button>
+      </div>
       <section class="orders panel" aria-label="Squad orders">
         <div class="section-label">
           <span data-text="commandLabel"></span><span id="squad"></span>
         </div>
         <div class="button-row">
+          <button data-action="all" data-text="all"></button>
           <button data-action="attack" data-text="attack" aria-pressed="false"></button>
           <button data-action="defend" data-text="defend" aria-pressed="true"></button>
           <button data-action="follow" data-text="follow" aria-pressed="false"></button>
@@ -86,8 +93,12 @@
         <div class="section-label">
           <span data-text="abilityLabel"></span><span id="rank"></span>
         </div>
-        <div class="button-row">
+        <div class="production">
+          <select id="element" aria-label="Element to summon"></select>
           <button data-action="summon" class="primary"><span data-text="summon"></span><small id="summon-cost"></small></button>
+        </div>
+        <div class="button-row">
+          <button data-action="strike" data-text="strike"></button>
           <button data-action="pulse"><span data-text="pulse"></span><small id="pulse-cost"></small></button>
           <button data-action="upgrade"><span data-text="upgrade"></span><small id="upgrade-cost"></small></button>
         </div>
@@ -101,12 +112,7 @@
         <p id="menu-description"></p>
         <p id="menu-detail"></p>
         <div id="menu-actions"></div>
-        <label class="quality" for="quality"><span data-text="quality"></span>
-          <select id="quality">
-            <option value="standard" data-text="standard"></option>
-            <option value="battery" data-text="battery"></option>
-          </select>
-        </label>
+        <div id="menu-content"></div>
         <p class="keyboard" data-text="keyboard"></p>
       </div>
     </dialog>

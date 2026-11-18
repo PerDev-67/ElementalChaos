@@ -1,31 +1,30 @@
 # Elemental Chaos · 元素大亂鬥
 
-Level 1, **Hydrogen Awakening**, is a 100-second action-strategy mission. Move your commander, summon hydrogen units, and defend the energy core against three waves.
+Version 0.1 is a four-mission action-strategy RPG. Explore Iris Station as Ren, meet its scientists and wardens, and command elemental allies against the fractures.
 
 ## Play
 
-Choose **Start tutorial** for four short exercises or **Start mission** to go straight into battle. In battle, summon a few units and keep them on **Defend** to protect the core. **Pulse** hits nearby enemies and **Upgrade** improves all current and future units in that run. Clear the mission to unlock Hydrogen, atomic number 1.
+Open the hosted game in Safari on iPad or in a WebGL 2 desktop browser. Choose **Start Tutorial** for eight short exercises, **Skip Tutorial** to explore the station, or **Continue** to resume a saved mission. Open **Map** to travel to any unlocked destination. The first victory permanently unlocks Hydrogen. The remaining three missions unlock Helium, Lithium, and Beryllium in that order.
 
 | Action | Desktop | Touch |
 | --- | --- | --- |
-| Move the commander | WASD or arrow keys | Hold the direction pad |
-| Summon Hydrogen | 1 | Summon H |
-| Attack, Defend, Follow | 2, 3, 4 | Tap the corresponding order |
-| Move the squad | 5, then click a point | Move, then tap a point |
-| Pulse, Upgrade | Space, U | Pulse, Upgrade |
-| Zoom | Minus, Plus | −, + |
-| Pause or resume | Esc | Pause, then Resume |
+| Move and run | WASD or arrows, hold Shift to run | Drag the joystick or hold the optional pad, tap Run to toggle |
+| Interact | E | Interact |
+| Strike and Pulse | F and Space | Strike and Pulse |
+| Summon | Choose the element in the dropdown, then press 1 | Choose an element, then tap Summon |
+| Select units | Click units to toggle them, use All to clear individual selection | Tap units or tap All |
+| Attack, Defend, Follow | 2, 3, 4 | Tap the order |
+| Move squad | 5, then click the terrain | Move, then tap the terrain |
+| Upgrade battle rank | U | Upgrade |
+| Zoom and pause | Minus, Plus, Escape | −, +, Pause |
+| Open map | M | Map |
 
-Esc cancels an armed Move order first. A pause saves the mission on the current browser and site. You can reload and select **Resume checkpoint**. Finishing or restarting replaces that checkpoint. The Hydrogen unlock persists on the same browser and site. **Battery saver** lowers the rendering resolution and caps drawing at roughly 30 frames per second.
+Pause saves the current battle. The game also saves automatically during play. Settings include separate music and sound sliders, four graphics presets, a 30 FPS cap, and a choice of touch controls. On iPad, landscape gives the battlefield more room.
 
-## Playtest on iPad
+## Run this checkout locally
 
-Once an approved test link is available, open it in Safari and choose **Start tutorial**. Landscape leaves more room to see the arena. Hold the arrows to move, then try **Summon H**, **Move**, and a tap on open ground. During battle, tap **Pause**, reload Safari, and choose **Resume checkpoint** to check that the squad and timer return. If motion stutters, choose **Battery saver** in the pause menu. The development branch has no hosted iPad link yet.
+A developer can serve the repository root with `python3 -m http.server 8000` and open `http://localhost:8000/`. The project is ready for static hosting under a root or project subdirectory. WebGL 2 is required. Three.js r180 is vendored under the MIT license. No build step, package install, backend, external CDN, or API key is required.
 
-## Development
-
-The game is a static site with local ES modules and vendored Three.js r180 (MIT). Serve the repository root over HTTP, then open `index.html` through that server. For example, a developer can run `python3 -m http.server 8000` and open `http://localhost:8000/`. WebGL 2 is required. Production needs no build step, package install, backend, external CDN, or API key.
-
-Run `npm run check` and `npm test` with Node.js 22 or newer. See [testing](TESTING.md), [game design](GAME_DESIGN.md), [architecture](ARCHITECTURE.md), and [development status](DEVELOPMENT_STATUS.md).
+Run `npm run check` and `npm test` using Node.js 22 or newer. See the [game design](GAME_DESIGN.md), [architecture](ARCHITECTURE.md), [testing](TESTING.md), and [development status](DEVELOPMENT_STATUS.md).
 
 The original prototype is available in Git history at commit `cecabca`.

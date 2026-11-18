@@ -1,5 +1,5 @@
 import * as THREE from '../vendor/three.module.min.js';
-import { level, terrainHeight } from './config.js';
+import { worldHeight } from './config.js';
 
 const flat = color => new THREE.MeshStandardMaterial({ color, roughness: 0.86, flatShading: true });
 const glow = color => new THREE.MeshBasicMaterial({ color });
@@ -14,14 +14,15 @@ function piece(group, geometry, material, x, y, z, sx = 1, sy = 1, sz = 1) {
   return mesh;
 }
 
-function makeFloor(scene) {
-  const { width, depth } = level;
+function makeFloor(scene, map) {
+  const { width, depth } = map;
+  const terrainHeight = (x, z) => worldHeight(x, z, map);
   const geometry = new THREE.PlaneGeometry(width, depth, 48, 36);
   geometry.rotateX(-Math.PI / 2);
   const points = geometry.getAttribute('position');
   const colors = [];
   const shade = new THREE.Color();
-  const base = new THREE.Color('#364752');
+  const base = new THREE.Color(map.color ?? '#364752');
   for (let i = 0; i < points.count; i += 1) {
     const x = points.getX(i);
     const z = points.getZ(i);
@@ -53,7 +54,8 @@ function makeFloor(scene) {
   return floor;
 }
 
-function addTerrainDetails(scene) {
+function addTerrainDetails(scene, map) {
+  const terrainHeight = (x, z) => worldHeight(x, z, map);
   const dark = flat('#26343d');
   const edge = flat('#758996');
   const amber = glow('#e7a35f');
@@ -70,7 +72,7 @@ function addTerrainDetails(scene) {
     tile.rotation.y = -angle;
   }
 
-  for (const portal of level.portals) {
+  for (const portal of map.portals) {
     const angle = Math.atan2(portal.x, portal.z);
     for (let i = 1; i <= 9; i += 1) {
       const portion = i / 11;
@@ -113,8 +115,53 @@ function addTerrainDetails(scene) {
   }
 }
 
-export function createTerrain(scene) {
-  const floor = makeFloor(scene);
-  addTerrainDetails(scene);
+function landscape(scene, map) {
+  const grass = flat(map.theme === 'hub' ? '#4f8768' : '#457977');
+  const trunk = flat('#6a514a');
+  const sandstone = flat(map.theme === 'sky' ? '#9daebc' : '#626579');
+  const mineral = glow('#c48ef1');
+  const rock = new THREE.DodecahedronGeometry(1, 0);
+  const foliage = new THREE.ConeGeometry(1, 2.2, 7);
+  const shard = new THREE.OctahedronGeometry(1);
+  const obstructions = [];
+  for (const obstacle of map.obstacles ?? []) {
+    const y = worldHeight(obstacle.x, obstacle.z, map);
+    const material = sandstone.clone();
+    const model = piece(scene, map.theme === 'citadel' ? box : rock, material,
+      obstacle.x, y + .56, obstacle.z, obstacle.radius, 1.35, obstacle.radius);
+    model.rotation.y = .46;
+    obstructions.push(model);
+  }
+  scene.userData.obstructions = obstructions;
+  for (let i = 0; i < 19; i++) {
+    const angle = i * 2.39996;
+    const x = Math.cos(angle) * (18 + i % 5);
+    const z = Math.sin(angle) * (15 + i % 4);
+    const y = worldHeight(x, z, map);
+    if (map.portals.some(portal => Math.hypot(x - portal.x, z - portal.z) < 3.3)) continue;
+    if (map.theme === 'hub' || map.theme === 'vale') {
+      if (i % 3 === 0) piece(scene, rock, sandstone, x, y + .43, z, 1.1, .75, .83);
+      else {
+        piece(scene, cylinder, trunk, x, y + .67, z, .16, 1.34, .16);
+        piece(scene, foliage, grass, x, y + 1.65, z, .88, 1, .88);
+      }
+    } else if (map.theme === 'frontier') {
+      piece(scene, rock, sandstone, x, y + .51, z, 1.4, .9, .9);
+      if (i % 2 === 0) piece(scene, shard, mineral, x + .4, y + 1.03, z, .34, .8, .32).rotation.z = -.26;
+    } else if (map.theme === 'sky') {
+      const platform = piece(scene, cylinder, sandstone, x * 1.47, y + 1 + i % 3, z * 1.42, 1.6, .4, 1.6);
+      platform.rotation.z = i % 2 ? .14 : -.13;
+      piece(scene, rock, sandstone, platform.position.x, platform.position.y - .8, platform.position.z, 1.37, 1.19, 1.37);
+    } else if (map.theme === 'citadel' && (Math.abs(x) > 16 || Math.abs(z) > 14)) {
+      piece(scene, box, sandstone, x, y + .94, z, i % 2 ? 1.9 : .8, 1.9, .95).rotation.y = angle;
+      if (i % 3 === 0) piece(scene, box, trunk, x + .86, y + .21, z, .8, .4, .6).rotation.y = angle + .8;
+    }
+  }
+}
+
+export function createTerrain(scene, map) {
+  const floor = makeFloor(scene, map);
+  addTerrainDetails(scene, map);
+  landscape(scene, map);
   return floor;
 }
