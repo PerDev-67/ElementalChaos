@@ -4,7 +4,7 @@ import { Interface, lessons } from './ui.js';
 import { bindInput } from './input.js';
 import { newProfile, readProfile, writeProfile } from './profile.js';
 import { campaign, commands, missionSpec } from './config.js';
-import { availableLevel, briefings, buyUpgrade, cast, completeLevel } from './campaign.js';
+import { availableLevel, briefings, buyUpgrade, cast, completeLevel, guideId } from './campaign.js';
 import { actor } from './units.js';
 import { distanceSquared, updatePlayer } from './player.js';
 import { GameAudio } from './audio.js';
@@ -81,8 +81,7 @@ function enterBattle(id, checkpoint) {
 
 function enterTraining() {
   changeScene(1, 'training');
-  const mira = cast.mira;
-  state.npcs = [{ ...actor('npc', 900, 2.1, 4.7, 1), npc: 'mira', name: mira.name }];
+  state.npcs = [{ ...actor('npc', 900, 2.1, 4.7, 1), npc: guideId }];
   lesson = 0;
   lessonPassed = false;
   lessonDistance = 0;
@@ -210,6 +209,7 @@ function interact() {
     return;
   }
   if (mode === 'training' && lesson === 2) passLesson();
+  if (npc.npc === guideId) npc.greetAt = performance.now() / 1000;
   const key = 'talk' + npc.npc[0].toUpperCase() + npc.npc.slice(1);
   talk([[npc.npc, t(key)]], npc.npc === 'tess' ? 'shop' : 'closeDialogue', npc.npc === 'tess' ? 'shop' : 'back', t('opening'));
 }
@@ -384,7 +384,9 @@ function frame(now) {
     }
   }
   audio.update(mode === 'battle' && active() ? 'battle' : mode === 'hub' ? 'hub' : 'home');
-  view.draw(state, now, active());
+  const guideDialogue = screen === 'dialogue' && dialogue.lines[dialogue.index][0] === guideId;
+  view.draw(state, now, active() || (guideDialogue && Boolean(state.npcs?.length)));
+  ui.animateGuide(now, profile.settings.limit);
   requestAnimationFrame(frame);
 }
 
