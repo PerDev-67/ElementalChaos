@@ -1,8 +1,9 @@
+import { guideArtwork } from './astral-guide.js';
 import { campaign, commands, hydrogen, missionSpec } from './config.js';
 import { phaseAt } from './mission.js';
 import { setLocale, t } from './locale.js';
 import { elements, unitSpec } from './elements.js';
-import { availableLevel, cast, upgrades, aftermath } from './campaign.js';
+import { availableLevel, cast, upgrades, aftermath, guideId } from './campaign.js';
 import { qualities } from './profile.js';
 
 export const lessons = ['lessonMove', 'lessonCamera', 'lessonTalk', 'lessonSummon', 'lessonAuto', 'lessonOrders', 'lessonCore', 'lessonFinish'];
@@ -65,6 +66,8 @@ export class Interface {
   content = byId('menu-content');
   element = byId('element');
   lastNoticeTimer = 0;
+  guideMotion = null;
+  reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   constructor(onAction, onChoice, settings) {
     this.localize(settings);
@@ -114,6 +117,16 @@ export class Interface {
 
   aiming(value) {
     this.root.classList.toggle('aiming', value);
+  }
+
+  animateGuide(now, limit) {
+    const motion = this.guideMotion;
+    if (!motion || !this.menu.open || this.reducedMotion.matches || now - motion.last < (limit ? 31 : 14)) return;
+    motion.last = now;
+    const time = (now - motion.start) / 1000;
+    const arrive = Math.exp(-time * 7);
+    motion.image.style.transform = `translate3d(0,${Math.sin(time * 2.7) * 1.7 + arrive * 4}px,0) rotate(${Math.sin(time * 1.6) * .65}deg)`;
+    motion.glow.style.opacity = String(.47 + Math.sin(time * 3) * .2 + arrive * .24);
   }
 
   hideMenu() {
@@ -187,6 +200,7 @@ export class Interface {
     byId('menu-description').hidden = !description;
     this.actions.replaceChildren();
     this.content.replaceChildren();
+    this.guideMotion = null;
     if (content) this.content.append(content);
     for (const [action, key] of buttons) {
       const button = create('button', t(key));
@@ -295,7 +309,19 @@ export class Interface {
     const [who, message] = line;
     const person = names[who];
     const content = create('div', '', 'dialogue');
-    if (portraits.includes(who)) {
+    let guide;
+    if (who === guideId) {
+      const frame = create('div', '', 'astral-portrait');
+      const image = create('img');
+      image.src = guideArtwork;
+      image.alt = '';
+      const glow = create('span', '', 'astral-glow');
+      glow.setAttribute('aria-hidden', 'true');
+      frame.append(image, glow);
+      content.classList.add('astral-dialogue');
+      content.append(frame);
+      guide = { image, glow, start: performance.now(), last: -Infinity };
+    } else if (portraits.includes(who)) {
       const portrait = create('img');
       portrait.src = `./art/${who}.webp`;
       portrait.alt = '';
@@ -306,8 +332,9 @@ export class Interface {
     content.append(create('blockquote', message));
     const buttons = [[last ? finalAction : 'line', last ? finalKey : 'next']];
     if (!last && finalAction === 'depart') buttons.push(['depart', 'skipBriefing']);
-    buttons.push(['back', 'back']);
+    if (!last || finalKey !== 'back') buttons.push(['back', 'back']);
     this.showMenu(person.name, person.role, label, '', buttons, content);
+    this.guideMotion = guide;
   }
 
   result(state, reward, saved) {

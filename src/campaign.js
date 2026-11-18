@@ -7,7 +7,10 @@ export const upgrades = [
   { id: 'salvage', cost: 90, name: 'Salvage Charter', detail: 'Earn 25% more on future first clears.' }
 ];
 
+export const guideId = 'astra';
+
 export const cast = {
+  [guideId]: { name: 'Astra', role: 'Astral cartographer', x: 2.4, z: 3.4 },
   mira: { name: 'Dr. Mira', role: 'Field scientist', x: -6, z: 0, color: '#86d1ad' },
   tess: { name: 'Tess', role: 'Workshop engineer', x: 5.5, z: -5, color: '#fac486' },
   lumi: { name: 'Lumi', role: 'Helium guide', x: -7.5, z: -9, color: '#f4ce7f' },
@@ -15,20 +18,22 @@ export const cast = {
 };
 
 export const briefings = [
-  [['mira', 'This is Iris Station, Ren. The relay is reacting to you. Try calling the light inside it.'],
+  [[guideId, 'Welcome to Iris Station, Ren. I’m Astra. The relay just answered my staff with your signature. Try calling the light inside it.'],
    ['ren', 'It answered. Is that what was moving out beyond the ridge?'],
-   ['mira', 'No. Something is opening fractures in the vale. Keep the relay standing and your new allies will do the rest.']],
+   [guideId, 'Something is opening fractures in the vale. Hold the relay and I’ll chart where the disturbance is coming from.']],
   [['tess', 'The upper platforms are under attack. Tap allies to select them, then use Move to intercept the fast ones.'],
-   ['lumi', 'My current can reach the installation. Hold it until I can cross.']],
-  [['mira', 'These deposits point to an old signal beneath the Citadel.'],
+   ['lumi', 'My current can reach the installation. Hold it until I can cross.'],
+   [guideId, 'The fractures are moving with the upper current. Once Lumi is across, I can follow their trail.']],
+  [[guideId, 'My chart puts the source beneath the Citadel. Mira’s survey ring can confirm it.'],
    ['ren', 'I’ll send the squad to the survey ring. An Upgrade should help them hold until it’s secure.'],
    ['mira', 'Try the chill beacon near the ring. It uses a simulated 18 kelvin field and can temporarily slow Hydrogen movement.']],
   [['orin', 'The signal is tangled up in the old Citadel guardian. I can hold the gate until you get to the core.'],
-   ['ren', 'We’ll break its hold. Keep a route open for the people behind us.']]
+   ['ren', 'We’ll break its hold. Keep a route open for the people behind us.'],
+   [guideId, 'When the guardian rises, watch its position before you move the squad. I’ll keep the path back to the station marked.']]
 ];
 
 export const aftermath = [
-  'The fractures have gone quiet. Mira traces a current heading above the clouds.',
+  'The fractures have gone quiet. Astra traces a current heading above the clouds.',
   'Lumi reaches the station and joins your roster. The signal points toward the mineral frontier.',
   'Ione pulls a damaged map from the survey ring. Its lines lead to the Broken Citadel.',
   'The guardian falls silent. Ren and his allies return to Iris Station with Beryl and a map of the deeper fractures.'

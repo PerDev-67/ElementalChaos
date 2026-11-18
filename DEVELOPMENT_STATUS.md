@@ -1,5 +1,7 @@
 # Development status
 
+Astra is the main story guide in the station, tutorial and campaign briefings. Her facing sprite animates hair and hems, an illuminated staff and orbiting motes. Dialogue has a separate animated presentation. Both target 60 updates per second on a 60 Hz display and respect the 30 FPS setting and reduced motion.
+
 ## Implemented
 
 - [x] Four sequential, replayable missions in two chapters and four elemental unlocks.

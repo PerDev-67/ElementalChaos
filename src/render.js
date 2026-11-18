@@ -1,3 +1,5 @@
+import { createGuideVisual, updateGuideVisual, disposeGuideVisual } from './astral-guide.js';
+import { guideId } from './campaign.js';
 import * as THREE from '../vendor/three.module.min.js';
 import { worldHeight, missionSpec, sanctuary } from './config.js';
 import { elements } from './elements.js';
@@ -171,6 +173,7 @@ export class Battlefield {
   environments = new Map();
   map = sanctuary;
   drops = [];
+  reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   height(x, z) {
     return worldHeight(x, z, this.map);
@@ -273,21 +276,34 @@ export class Battlefield {
   }
 
   reset() {
-    for (const model of this.models.values()) this.scene.remove(model.root);
+    for (const model of this.models.values()) this.removeModel(model);
     this.models.clear();
     this.snap = true;
     this.lastRender = -Infinity;
   }
 
+  removeModel(model) {
+    this.scene.remove(model.root);
+    if (model.sprite) disposeGuideVisual(model);
+  }
+
   drawActor(actor, elapsed, state) {
     let model = this.models.get(actor.id);
     if (!model) {
-      model = modelFor(actor, this.presentation);
+      model = actor.npc === guideId
+        ? createGuideVisual(() => { this.lastRender = -Infinity; })
+        : modelFor(actor, this.presentation);
       this.scene.add(model.root);
       this.models.set(actor.id, model);
     }
     model.seen = this.frame;
     model.root.position.set(actor.x, this.height(actor.x, actor.z), actor.z);
+    if (model.sprite) {
+      const sinceGreeting = elapsed - (actor.greetAt ?? -Infinity);
+      const progress = Math.max(0, Math.min(1, sinceGreeting / 1.24));
+      updateGuideVisual(model, this.view.camera, elapsed, Math.sin(progress * Math.PI), this.reducedMotion.matches);
+      return;
+    }
     model.body.rotation.y = actor.kind === 'core' ? elapsed * 0.9 : actor.heading;
     model.highlight.material = actor.flash > 0 ? white : model.originalMaterial;
     const gentle = this.quality !== 'low';
@@ -367,7 +383,7 @@ export class Battlefield {
     for (const npc of state.npcs ?? []) this.drawActor(npc, elapsed, state);
     for (const [id, model] of this.models) {
       if (model.seen === this.frame) continue;
-      this.scene.remove(model.root);
+      this.removeModel(model);
       this.models.delete(id);
     }
     this.marker.visible = state.order === 'move' || state.allies.some(unit => unit.order === 'move');

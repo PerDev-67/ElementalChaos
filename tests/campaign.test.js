@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { campaign, missionSpec } from '../src/config.js';
-import { availableLevel, buyUpgrade, completeLevel } from '../src/campaign.js';
+import { availableLevel, briefings, buyUpgrade, cast, completeLevel, guideId } from '../src/campaign.js';
 import { createMission, selectUnit, act, stepMission } from '../src/mission.js';
 import { elements, phaseOf } from '../src/elements.js';
 import { readProfile, newProfile, writeProfile } from '../src/profile.js';
@@ -161,4 +161,15 @@ test('purchases are one-time, respect balance, and apply to future missions', ()
   assert.equal(buyUpgrade(profile, 'reserve'), false);
   assert.equal(profile.coins, 17);
   assert.equal(createMission(2, profile).energy, campaign[1].initialEnergy + 24);
+});
+
+
+test('the station guide appears in every mission briefing without replacing the supporting cast', () => {
+  assert.equal(cast[guideId].name, 'Astra');
+  assert.equal(cast.mira.name, 'Dr. Mira');
+  assert.equal(briefings.length, campaign.length);
+  for (const briefing of briefings) {
+    assert.ok(briefing.some(([speaker]) => speaker === guideId));
+    assert.ok(briefing.every(([speaker]) => speaker === 'ren' || Object.hasOwn(cast, speaker)));
+  }
 });
